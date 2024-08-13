@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  *  BlickCompressor
  *  An example compression algorithm created by Zach Blick
  *  for Adventures in Algorithms at Menlo School in Atherton, CA
@@ -16,11 +16,11 @@
  *  % java BlickCompressor - < BlickTest.txt | java DumpBinary 0
  *    888 bits
  ******************************************************************************/
-
 public class BlickCompressor {
 
     public static final String TARGET = "Blickensderfer";
     public static final int LEN = TARGET.length();
+    public static final int BITS_PER_CHAR = 7;
     public static final char ESC = 0x07;                   // Utilizing an obsolete ASCII code
 
     /**
@@ -31,20 +31,16 @@ public class BlickCompressor {
 
         // Read in the string and find the first instance of TARGET
         String s = BinaryStdIn.readString();
-        String copy = s;
         int n = s.length();
-        int target = copy.indexOf(TARGET);
 
         // Write out each character
         for (int i = 0; i < n; i++) {
-            if (i == target) {
-                BinaryStdOut.write(ESC);
+            if (i + LEN <= n && s.substring(i,i+LEN).equals(TARGET)) {
+                BinaryStdOut.write(ESC, BITS_PER_CHAR);
                 i += LEN - 1;
-                copy = copy.substring(target + LEN);
-                target = copy.indexOf(TARGET);
             }
             else {
-                BinaryStdOut.write(s.charAt(i));
+                BinaryStdOut.write(s.charAt(i), BITS_PER_CHAR);
             }
         }
         BinaryStdOut.close();
@@ -55,9 +51,8 @@ public class BlickCompressor {
      * the escape character into the TARGET string. Keeps all other chars unchanged.
      */
     public static void expand() {
-
         while (!BinaryStdIn.isEmpty()) {
-            char c = BinaryStdIn.readChar();
+            char c = BinaryStdIn.readChar(BITS_PER_CHAR);
             if (c == ESC) {
                 BinaryStdOut.write(TARGET);
             }
