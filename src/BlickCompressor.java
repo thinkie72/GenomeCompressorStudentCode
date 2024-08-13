@@ -1,4 +1,4 @@
-/******************************************************************************
+/*******************************************************************************
  *  BlickCompressor
  *  An example compression algorithm created by Zach Blick
  *  for Adventures in Algorithms at Menlo School in Atherton, CA
@@ -16,6 +16,7 @@
  *  % java BlickCompressor - < BlickTest.txt | java DumpBinary 0
  *    888 bits
  ******************************************************************************/
+
 public class BlickCompressor {
 
     public static final String TARGET = "Blickensderfer";
