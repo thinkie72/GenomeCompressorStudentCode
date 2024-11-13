@@ -9,6 +9,7 @@
  *  Compress or expand a genomic sequence using a 2-bit code.
  ******************************************************************************/
 
+
 /**
  *  The {@code GenomeCompressor} class provides static methods for compressing
  *  and expanding a genomic sequence using a 2-bit code.
@@ -19,6 +20,13 @@
  */
 public class GenomeCompressor {
 
+    public static final int A = 0b00;
+    public static final int C = 0b01;
+    public static final int G = 0b10;
+    public static final int T = 0b11;
+    public static final int BITS_PER_CHAR = 2;
+
+
     /**
      * Reads a sequence of 8-bit extended ASCII characters over the alphabet
      * { A, C, T, G } from standard input; compresses and writes the results to standard output.
@@ -27,7 +35,23 @@ public class GenomeCompressor {
 
         // TODO: complete the compress() method
 
+        String s = BinaryStdIn.readString();
+        int n = s.length();
+
+        for (int i = 0; i < n; i++) {
+            BinaryStdOut.write(encode(s.charAt(i)), 2);
+        }
+
         BinaryStdOut.close();
+    }
+
+    private static int encode(char c) {
+        return switch (c) {
+            case 'A' -> A;
+            case 'C' -> C;
+            case 'G' -> G;
+            default -> T;
+        };
     }
 
     /**
@@ -36,8 +60,22 @@ public class GenomeCompressor {
     public static void expand() {
 
         // TODO: complete the expand() method
+        int encoded = 0;
+        while (!BinaryStdIn.isEmpty())
+            encoded = BinaryStdIn.readInt(2);
+            BinaryStdOut.write(decode(encoded));
+        }
 
         BinaryStdOut.close();
+    }
+
+    private static char decode(int i) {
+        return switch (i) {
+            case A -> 'A';
+            case C -> 'C';
+            case G -> 'G';
+            default -> 'T';
+        };
     }
 
 
