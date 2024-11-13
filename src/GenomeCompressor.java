@@ -38,6 +38,8 @@ public class GenomeCompressor {
         String s = BinaryStdIn.readString();
         int n = s.length();
 
+        BinaryStdOut.write(n, 32);
+
         for (int i = 0; i < n; i++) {
             BinaryStdOut.write(encode(s.charAt(i)), 2);
         }
@@ -60,8 +62,10 @@ public class GenomeCompressor {
     public static void expand() {
 
         // TODO: complete the expand() method
-        int encoded = 0;
-        while (!BinaryStdIn.isEmpty())
+        int numChars = BinaryStdIn.readInt(32);
+
+        int encoded;
+        for (int i = 0; i < numChars; i++) {
             encoded = BinaryStdIn.readInt(2);
             BinaryStdOut.write(decode(encoded));
         }
