@@ -20,10 +20,6 @@
  */
 public class GenomeCompressor {
 
-    public static final int A = 0b00;
-    public static final int C = 0b01;
-    public static final int G = 0b10;
-    public static final int T = 0b11;
     public static final int BITS_PER_CHAR = 2;
 
 
@@ -32,54 +28,47 @@ public class GenomeCompressor {
      * { A, C, T, G } from standard input; compresses and writes the results to standard output.
      */
     public static void compress() {
-
-        // TODO: complete the compress() method
+        // Array to hold the binary 2-bit values of each of the characters at their index
+        // The Array is of size 85 because the ASCII Value of T is 84
+        int[] charsToVals = new int[85];
+        charsToVals['A'] = 0;
+        charsToVals['C'] = 1;
+        charsToVals['G'] = 2;
+        charsToVals['T'] = 3;
 
         String s = BinaryStdIn.readString();
         int n = s.length();
 
+        // Writes int at start of file to read in only the real characters and not the padded zeroes
         BinaryStdOut.write(n, 32);
 
         for (int i = 0; i < n; i++) {
-            BinaryStdOut.write(encode(s.charAt(i)), 2);
+            BinaryStdOut.write(charsToVals[s.charAt(i)], BITS_PER_CHAR);
         }
 
         BinaryStdOut.close();
-    }
-
-    private static int encode(char c) {
-        return switch (c) {
-            case 'A' -> A;
-            case 'C' -> C;
-            case 'G' -> G;
-            default -> T;
-        };
     }
 
     /**
      * Reads a binary sequence from standard input; expands and writes the results to standard output.
      */
     public static void expand() {
+        // Create an array for the values in binary mapped to the actual chars
+        char[] valsToChars = new char[4];
+        valsToChars[0] = 'A';
+        valsToChars[1] = 'C';
+        valsToChars[2] = 'G';
+        valsToChars[3] = 'T';
 
-        // TODO: complete the expand() method
+        // Reads the int at start of file for for-loop
         int numChars = BinaryStdIn.readInt(32);
 
-        int encoded;
         for (int i = 0; i < numChars; i++) {
-            encoded = BinaryStdIn.readInt(2);
-            BinaryStdOut.write(decode(encoded));
+            int code = BinaryStdIn.readInt(2);
+            BinaryStdOut.write(valsToChars[code]);
         }
 
         BinaryStdOut.close();
-    }
-
-    private static char decode(int i) {
-        return switch (i) {
-            case A -> 'A';
-            case C -> 'C';
-            case G -> 'G';
-            default -> 'T';
-        };
     }
 
 
